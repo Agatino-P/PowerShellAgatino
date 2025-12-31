@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration>
+  <ViewDefinitions>
+
+    <!-- Custom default table for System.IO.FileInfo on Unix-like systems -->
+    <View>
+      <Name>FileInfo-Unix-SizeMB</Name>
+      <ViewSelectedBy>
+        <TypeName>System.IO.FileInfo</TypeName>
+      </ViewSelectedBy>
+
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Label>UnixMode</Label>
+            <Width>10</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>User</Label>
+            <Width>18</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Group</Label>
+            <Width>10</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>LastWriteTime</Label>
+            <Width>20</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>SizeMB</Label>
+            <Alignment>Right</Alignment>
+            <Width>10</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Name</Label>
+            <Width>40</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <!-- Unix permission bits -->
+              <TableColumnItem>
+                <PropertyName>UnixMode</PropertyName>
+              </TableColumnItem>
+
+              <!-- User and Group, with enough width to not wrap -->
+              <TableColumnItem>
+                <PropertyName>User</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Group</PropertyName>
+              </TableColumnItem>
+
+              <!-- LastWriteTime: shorter 24h format -->
+              <TableColumnItem>
+                <PropertyName>LastWriteTime</PropertyName>
+                <FormatString>{0:MM/dd/yyyy HH:mm}</FormatString>
+                <!-- If you prefer ISO style, use: {0:yyyy-MM-dd HH:mm} -->
+              </TableColumnItem>
+
+              <!-- Size in MB instead of bytes -->
+              <TableColumnItem>
+                <ScriptBlock>
+                  if ($_ -is [System.IO.FileInfo]) {
+                    "{0:N2}" -f ($_.Length / 1MB)
+                  }
+                </ScriptBlock>
+              </TableColumnItem>
+
+              <!-- File name -->
+              <TableColumnItem>
+                <PropertyName>Name</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+
+  </ViewDefinitions>
+</Configuration>

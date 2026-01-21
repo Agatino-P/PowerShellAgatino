@@ -1,0 +1,5 @@
+openssl req -x509 -newkey rsa:2048 -keyout private.key -out certificate.crt -days 365 -nodes -subj "/CN=TestCert"
+
+openssl x509 -pubkey -noout -in certificate.crt > public.pem
+
+openssl x509 -in certificate.crt -noout -fingerprint -sha1
